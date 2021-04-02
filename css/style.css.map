@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["../../../../%C5%82ukasz/projekty/joinpoints/scss/style.scss"],"names":[],"mappings":"AAAA;EACI;EACA;EACA;;;AAKJ;EACI;EACA;EACA;;AACA;EACI;EACA;EACA;EACA;EACA;;AACA;EACI;EACA;EACA;EACA;EACA","file":"style.css"}
+{"version":3,"sourceRoot":"","sources":["../../../../%C5%82ukasz/projekty/joinpoints/scss/_gameBoard.scss","../../../../%C5%82ukasz/projekty/joinpoints/scss/main.scss"],"names":[],"mappings":"AAAA;EACI;EACA;EACA;;AACA;EACI;EACA;EACA;EACA;EACA;;AACA;EACI;EACA;EACA;EACA;EACA;;;ACbZ;EACI;EACA;EACA","file":"style.css"}
