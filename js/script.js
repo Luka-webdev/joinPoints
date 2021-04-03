@@ -14,6 +14,7 @@ $(function(){
     let previousConnectedId;
     let newConnectedId;
     let connections = [];
+    let gameOrder = 0;
 
     // Add canvas
 
@@ -21,6 +22,74 @@ $(function(){
     const ctx = canvas.getContext('2d');
     canvas.width = boardWidth;
     canvas.height = boardHeight;
+
+    //function to create football pitch
+
+    function createPitch() {
+        ctx.beginPath();
+        ctx.moveTo(boardWidth/2,0);
+        ctx.lineTo(boardWidth/2,boardHeight);
+        ctx.closePath();
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(boardWidth/2,boardHeight/2,2*step,0,Math.PI*2,true);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0,boardHeight/2-2*step);
+        ctx.lineTo(2*step,boardHeight/2-2*step);
+        ctx.lineTo(2*step,boardHeight/2+2*step);
+        ctx.lineTo(0,boardHeight/2+2*step);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(boardWidth,boardHeight/2-2*step);
+        ctx.lineTo(boardWidth-2*step,boardHeight/2-2*step);
+        ctx.lineTo(boardWidth-2*step,boardHeight/2+2*step);
+        ctx.lineTo(boardWidth,boardHeight/2+2*step);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0,boardHeight/2);
+        ctx.lineTo(0,boardHeight/2-step);
+        ctx.lineTo(0,boardHeight/2+step);
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(boardWidth,boardHeight/2);
+        ctx.lineTo(boardWidth,boardHeight/2-step);
+        ctx.lineTo(boardWidth,boardHeight/2+step);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(0,0,step/2,0,Math.PI*0.5,false);
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(boardWidth,0,step/2,0,Math.PI*0.5,true);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(0,boardHeight,step/2,0,Math.PI*0.5,true);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(boardWidth,boardHeight,step/2,0,Math.PI*0.5,true);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(2*step,boardHeight/2,step,Math.PI*0.5,Math.PI*1.5,true);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(boardWidth-2*step,boardHeight/2,step,Math.PI*0.5,Math.PI*1.5,false);
+        ctx.stroke();
+    }
 
     // Function to create points
 
@@ -55,20 +124,28 @@ $(function(){
     // Function to connect two points
 
     function makeMove() {
-        
-        let centerX = parseInt(centerPoint.css('left'));
-        let centerY = parseInt(centerPoint.css('top'));
-        resetProperty();
-        let newCenterPointId = Number($(this).attr('id'));
-        let moveX = parseInt($('#'+newCenterPointId).css('left'));
-        let moveY = parseInt($('#'+newCenterPointId).css('top'));
+        if(gameOrder%2 === 0){
+            let centerX = parseInt(centerPoint.css('left'));
+            let centerY = parseInt(centerPoint.css('top'));
+            resetProperty();
+            let newCenterPointId = Number($(this).attr('id'));
 
-        previousConnectedId = centerPoint.attr('id');
-        newConnectedId = $(this).attr('id');
-        connections.push(previousConnectedId+"-"+newConnectedId);
+            if($('#'+newCenterPointId).attr('clicked')){
+                console.log("masz jeszcze jeden ruch");
+            } else {
+                $('#'+newCenterPointId).attr('clicked',true);
+            }
+            let moveX = parseInt($('#'+newCenterPointId).css('left'));
+            let moveY = parseInt($('#'+newCenterPointId).css('top'));
 
-        drawMove(centerX,centerY,moveX,moveY);
-        setActivePoints(newCenterPointId)
+            previousConnectedId = centerPoint.attr('id');
+            newConnectedId = $(this).attr('id');
+            connections.push(previousConnectedId+"-"+newConnectedId);
+
+            drawMove(centerX,centerY,moveX,moveY);
+            setActivePoints(newCenterPointId)
+            gameOrder++;
+        }
     }
 
     // Function to set active points
@@ -97,6 +174,7 @@ $(function(){
         ctx.stroke();
     }
 
+    createPitch();
     creatPoints();
     setActivePoints(centerPointId);
 })
