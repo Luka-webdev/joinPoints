@@ -38,58 +38,51 @@ $(function(){
         ctx.beginPath();
         ctx.arc(boardWidth/2,boardHeight/2,2*step,0,Math.PI*2,true);
         ctx.stroke();
+        
+        function goalArea(x0,x1){
+            ctx.beginPath();
+            ctx.moveTo(x0,boardHeight/2-2*step);
+            ctx.lineTo(x1,boardHeight/2-2*step);
+            ctx.lineTo(x1,boardHeight/2+2*step);
+            ctx.lineTo(x0,boardHeight/2+2*step);
+            ctx.stroke();
+        }
 
-        ctx.beginPath();
-        ctx.moveTo(0,boardHeight/2-2*step);
-        ctx.lineTo(2*step,boardHeight/2-2*step);
-        ctx.lineTo(2*step,boardHeight/2+2*step);
-        ctx.lineTo(0,boardHeight/2+2*step);
-        ctx.stroke();
+        goalArea(0,2*step)
+        goalArea(boardWidth,boardWidth-2*step)
 
-        ctx.beginPath();
-        ctx.moveTo(boardWidth,boardHeight/2-2*step);
-        ctx.lineTo(boardWidth-2*step,boardHeight/2-2*step);
-        ctx.lineTo(boardWidth-2*step,boardHeight/2+2*step);
-        ctx.lineTo(boardWidth,boardHeight/2+2*step);
-        ctx.stroke();
+        function goalLine(x0){
+            ctx.beginPath();
+            ctx.moveTo(x0,boardHeight/2);
+            ctx.lineTo(x0,boardHeight/2-step);
+            ctx.lineTo(x0,boardHeight/2+step);
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+        }
 
-        ctx.beginPath();
-        ctx.moveTo(0,boardHeight/2);
-        ctx.lineTo(0,boardHeight/2-step);
-        ctx.lineTo(0,boardHeight/2+step);
-        ctx.strokeStyle = "black";
-        ctx.stroke();
+        goalLine(0);
+        goalLine(boardWidth);
 
-        ctx.beginPath();
-        ctx.moveTo(boardWidth,boardHeight/2);
-        ctx.lineTo(boardWidth,boardHeight/2-step);
-        ctx.lineTo(boardWidth,boardHeight/2+step);
-        ctx.stroke();
+        function corners(x0,y0,direction){
+            ctx.beginPath();
+            ctx.arc(x0,y0,step/2,0,Math.PI*0.5,direction);
+            ctx.strokeStyle = "white";
+            ctx.stroke();
+        }
+        
+        corners(0,0,false)
+        corners(boardWidth,0,true)
+        corners(0,boardHeight,true)
+        corners(boardWidth,boardHeight,true)
 
-        ctx.beginPath();
-        ctx.arc(0,0,step/2,0,Math.PI*0.5,false);
-        ctx.strokeStyle = "white";
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(boardWidth,0,step/2,0,Math.PI*0.5,true);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(0,boardHeight,step/2,0,Math.PI*0.5,true);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(boardWidth,boardHeight,step/2,0,Math.PI*0.5,true);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(2*step,boardHeight/2,step,Math.PI*0.5,Math.PI*1.5,true);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(boardWidth-2*step,boardHeight/2,step,Math.PI*0.5,Math.PI*1.5,false);
-        ctx.stroke();
+        function semicircle(x0,direction){
+            ctx.beginPath();
+            ctx.arc(x0,boardHeight/2,step,Math.PI*0.5,Math.PI*1.5,direction);
+            ctx.stroke();
+        }
+        
+        semicircle(2*step,true)
+        semicircle(boardWidth-2*step,false)
     }
 
     // Function to create points
@@ -119,66 +112,72 @@ $(function(){
 
     function resetProperty() {
         centerPoint.removeClass('center');
-        $('.active').removeClass('active').off('click', makeMove);
+        $('.active').removeClass('active').off('click', userMove);
         gameOrder=!gameOrder;
     }
 
-    // Function to connect two points
+    // Function to determine coordinate
 
     function getCoordinate(newId){
+
             centerX = parseInt(centerPoint.css('left'));
             centerY = parseInt(centerPoint.css('top'));
 
-            moveX = parseInt($('#'+newCenterPointId).css('left'));
-            moveY = parseInt($('#'+newCenterPointId).css('top'));
+            moveX = parseInt($('#'+newId).css('left'));
+            moveY = parseInt($('#'+newId).css('top'));
 
             previousConnectedId = centerPoint.attr('id');
-            newConnectedId = $('#'+newCenterPointId).attr('id');
+            newConnectedId = $('#'+newId).attr('id');
             connections.push(previousConnectedId+"-"+newConnectedId);
     }
+
+    // function to make move
+
+    function makeMove(color){
+        resetProperty();
+        getCoordinate(newCenterPointId)
+        drawMove(centerX,centerY,moveX,moveY,color);
+        setActivePoints(newCenterPointId);
+        actualActivePointsId();
+    }
+
+    // Function for handling computer movement
 
     function cpuMove(){
         setTimeout(function(){
             newCenterPointId = Number(arrayActualId[0]);
-            resetProperty();
-            getCoordinate(newCenterPointId)
-            drawMove(centerX,centerY,moveX,moveY,"red");
-            setActivePoints(newCenterPointId);
-            actualActivePointsId();
+            makeMove("red");
             if($('#'+newCenterPointId).attr('clicked')){
-                gameOrder=false
-                cpuMove()
+                gameOrder=false;
+                cpuMove();
             } 
             else{
                 $('#'+newCenterPointId).attr('clicked',true)
-                gameOrder=true
+                gameOrder=true;
             } 
         },1000)
     }
 
-    function makeMove() {
+    // Function for handling user movement
+
+    function userMove() {
         if(gameOrder){
             newCenterPointId = Number($(this).attr('id'));
-            resetProperty();
-            getCoordinate(newCenterPointId)
-            drawMove(centerX,centerY,moveX,moveY,"green");
-            setActivePoints(newCenterPointId);
-            actualActivePointsId();
+            makeMove("green");
             if($(this).attr('clicked')){
-                console.log($(this).attr('clicked'))
-                gameOrder=true
+                gameOrder=true;
             } 
             else{
-                $(this).attr('clicked',true)
-                gameOrder=false
+                $(this).attr('clicked',true);
+                gameOrder=false;
             } 
         }  
         if(gameOrder===false){
-            cpuMove()
+            cpuMove();
         }
     }
 
-    // Function to set active points
+    // Function to determination active points for user motion
 
     function setActivePoints(id) {
 
@@ -191,12 +190,12 @@ $(function(){
             if(connections.includes(id+"-"+(id+activePointsId[i])) === false && connections.includes((id+activePointsId[i])+"-"+id) === false){ 
                 let activePoint = $('#'+(id+activePointsId[i]));
                 activePoint.addClass('active');
-                activePoint.on('click', makeMove)
+                activePoint.on('click', userMove)
             }
        }  
     }
 
-    // określenie gdzie ma kliknąć cpu
+    // Function to determination of active points for computer motion
 
     function actualActivePointsId(){
         arrayActualId=[];
@@ -220,5 +219,4 @@ $(function(){
     createPitch();
     creatPoints();
     setActivePoints(centerPointId);
-
 })
