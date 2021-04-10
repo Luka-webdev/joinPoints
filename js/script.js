@@ -14,7 +14,8 @@ $(function(){
     let previousConnectedId;
     let newConnectedId;
     let connections = [];
-    let gameOrder = 0;
+    let gameOrder = true;
+    let newCenterPointId;
 
     // Add canvas
 
@@ -119,32 +120,61 @@ $(function(){
     function resetProperty() {
         centerPoint.removeClass('center');
         $('.active').removeClass('active').off('click', makeMove);
+        gameOrder=!gameOrder;
     }
 
     // Function to connect two points
 
-    function makeMove() {
-        if(gameOrder%2 === 0){
-            let centerX = parseInt(centerPoint.css('left'));
-            let centerY = parseInt(centerPoint.css('top'));
-            resetProperty();
-            let newCenterPointId = Number($(this).attr('id'));
+    function getCoordinate(newId){
+            centerX = parseInt(centerPoint.css('left'));
+            centerY = parseInt(centerPoint.css('top'));
 
-            if($('#'+newCenterPointId).attr('clicked')){
-                console.log("masz jeszcze jeden ruch");
-            } else {
-                $('#'+newCenterPointId).attr('clicked',true);
-            }
-            let moveX = parseInt($('#'+newCenterPointId).css('left'));
-            let moveY = parseInt($('#'+newCenterPointId).css('top'));
+            moveX = parseInt($('#'+newCenterPointId).css('left'));
+            moveY = parseInt($('#'+newCenterPointId).css('top'));
 
             previousConnectedId = centerPoint.attr('id');
-            newConnectedId = $(this).attr('id');
+            newConnectedId = $('#'+newCenterPointId).attr('id');
             connections.push(previousConnectedId+"-"+newConnectedId);
+    }
 
-            drawMove(centerX,centerY,moveX,moveY);
-            setActivePoints(newCenterPointId)
-            gameOrder++;
+    function cpuMove(){
+        setTimeout(function(){
+            newCenterPointId = Number(arrayActualId[0]);
+            resetProperty();
+            getCoordinate(newCenterPointId)
+            drawMove(centerX,centerY,moveX,moveY,"red");
+            setActivePoints(newCenterPointId);
+            actualActivePointsId();
+            if($('#'+newCenterPointId).attr('clicked')){
+                gameOrder=false
+                cpuMove()
+            } 
+            else{
+                $('#'+newCenterPointId).attr('clicked',true)
+                gameOrder=true
+            } 
+        },1000)
+    }
+
+    function makeMove() {
+        if(gameOrder){
+            newCenterPointId = Number($(this).attr('id'));
+            resetProperty();
+            getCoordinate(newCenterPointId)
+            drawMove(centerX,centerY,moveX,moveY,"green");
+            setActivePoints(newCenterPointId);
+            actualActivePointsId();
+            if($(this).attr('clicked')){
+                console.log($(this).attr('clicked'))
+                gameOrder=true
+            } 
+            else{
+                $(this).attr('clicked',true)
+                gameOrder=false
+            } 
+        }  
+        if(gameOrder===false){
+            cpuMove()
         }
     }
 
@@ -152,6 +182,9 @@ $(function(){
 
     function setActivePoints(id) {
 
+        if(id === Math.floor(numberPoints/2)){
+            $('#'+id).attr('clicked',true);
+        }
        centerPoint = $('#'+id);
        centerPoint.addClass('center');
        for(let i=0;i<activePointsId.length;i++){
@@ -160,21 +193,32 @@ $(function(){
                 activePoint.addClass('active');
                 activePoint.on('click', makeMove)
             }
-       }
+       }  
+    }
+
+    // określenie gdzie ma kliknąć cpu
+
+    function actualActivePointsId(){
+        arrayActualId=[];
+        let actualActivePoints=$('.active')
+        actualActivePoints.each(function(){
+            arrayActualId.push($(this).attr('id'))
+        })     
     }
 
     // function to draw straight line
 
-    function drawMove(centerX,centerY,moveX,moveY) {
+    function drawMove(centerX,centerY,moveX,moveY,color) {
         ctx.beginPath();
         ctx.moveTo(centerX+shift,centerY+shift);
         ctx.lineTo(moveX+shift,moveY+shift);
         ctx.lineWidth = 6;
-        ctx.strokeStyle = "darkgreen";
+        ctx.strokeStyle = color;
         ctx.stroke();
     }
 
     createPitch();
     creatPoints();
     setActivePoints(centerPointId);
+
 })
