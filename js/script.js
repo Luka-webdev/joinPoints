@@ -16,6 +16,15 @@ $(function(){
     let connections = [];
     let gameOrder = true;
     let newCenterPointId;
+    let flag = true;
+
+    // Identification of id numbers on the goal lines
+
+    const firstRow = (boardHeight/step)/2 - 1;
+    const secondRow = (boardHeight/step)/2 ;
+    const thirdRow = (boardHeight/step)/2 + 1;
+    const arrayLosePointsId = [(firstRow*numberRows),(secondRow*numberRows),(thirdRow*numberRows)];
+    const arrayWinPointsId = [((firstRow+1)*numberRows)-1,((secondRow+1)*numberRows)-1,((thirdRow+1)*numberRows)-1];
 
     // Add canvas
 
@@ -134,11 +143,38 @@ $(function(){
     // function to make move
 
     function makeMove(color){
-        resetProperty();
-        getCoordinate(newCenterPointId)
-        drawMove(centerX,centerY,moveX,moveY,color);
-        setActivePoints(newCenterPointId);
-        actualActivePointsId();
+        if(flag){
+            resetProperty();
+            getCoordinate(newCenterPointId)
+            drawMove(centerX,centerY,moveX,moveY,color);
+            setActivePoints(newCenterPointId);
+            actualActivePointsId();
+        }
+    }
+
+    // Function to determine the conditions for winning and losing the game
+
+    function checkConditions(id){
+        for(let i=0;i<arrayWinPointsId.length;i++){
+            if(arrayWinPointsId[i] == id && gameOrder == false){
+                console.log("user wygrał")
+                flag=false   
+            }
+            else if(arrayWinPointsId[i] == id && gameOrder == true){
+                console.log("user wygrał")
+                flag=false
+            }
+        }
+        for(let i=0;i<arrayLosePointsId.length;i++){
+            if(arrayLosePointsId[i] == id && gameOrder == true){
+                console.log("user przegrał")
+                flag=false
+            }
+            else if(arrayLosePointsId[i] == id && gameOrder == false){
+                console.log("user przegrał")
+                flag=false
+            }
+        }
     }
 
     // Function for handling computer movement
@@ -181,18 +217,21 @@ $(function(){
 
     function setActivePoints(id) {
 
-        if(id === Math.floor(numberPoints/2)){
-            $('#'+id).attr('clicked',true);
-        }
-       centerPoint = $('#'+id);
-       centerPoint.addClass('center');
-       for(let i=0;i<activePointsId.length;i++){
-            if(connections.includes(id+"-"+(id+activePointsId[i])) === false && connections.includes((id+activePointsId[i])+"-"+id) === false){ 
-                let activePoint = $('#'+(id+activePointsId[i]));
-                activePoint.addClass('active');
-                activePoint.on('click', userMove)
+        checkConditions(id);
+        if(flag){
+            if(id === Math.floor(numberPoints/2)){
+                $('#'+id).attr('clicked',true);
             }
-       }  
+            centerPoint = $('#'+id);
+            centerPoint.addClass('center');
+            for(let i=0;i<activePointsId.length;i++){
+                if(connections.includes(id+"-"+(id+activePointsId[i])) === false && connections.includes((id+activePointsId[i])+"-"+id) === false){ 
+                    let activePoint = $('#'+(id+activePointsId[i]));
+                    activePoint.addClass('active');
+                    activePoint.on('click', userMove)
+                }
+            }
+        }  
     }
 
     // Function to determination of active points for computer motion
