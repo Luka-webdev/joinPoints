@@ -17,6 +17,8 @@ $(function(){
     let gameOrder = true;
     let newCenterPointId;
     let flag = true;
+    const message = $('.msg');
+    const playAgain = $('.playAgain');
 
     // Identification of id numbers on the goal lines
 
@@ -152,26 +154,50 @@ $(function(){
         }
     }
 
-    // Function to determine the conditions for winning and losing the game
+    // Function to start the game from the beginning
+
+    function generalReset(){
+        message.addClass('visibility');
+        resetProperty();
+        $('.point').removeAttr('clicked');
+        ctx.clearRect(0,0,boardWidth,boardHeight);
+        centerPointId = Math.floor(numberPoints/2);
+        connections.length = 0;
+        gameOrder = true;
+        flag = true;
+        createPitch();
+        creatPoints();
+        setActivePoints(centerPointId);
+    }
+
+    // Function to display information about winning or losing game
+
+    function resultGame(txt){
+        message.removeClass('visibility');
+        $('.msg h1').text(txt);
+        playAgain.on('click',generalReset);
+    }
+
+    // Function for determining conditions for winning and losing the game
 
     function checkConditions(id){
         for(let i=0;i<arrayWinPointsId.length;i++){
             if(arrayWinPointsId[i] == id && gameOrder == false){
-                console.log("user wygrał")
+                resultGame("user wygrał")
                 flag=false   
             }
             else if(arrayWinPointsId[i] == id && gameOrder == true){
-                console.log("user wygrał")
+                resultGame("user wygrał")
                 flag=false
             }
         }
         for(let i=0;i<arrayLosePointsId.length;i++){
             if(arrayLosePointsId[i] == id && gameOrder == true){
-                console.log("user przegrał")
+                resultGame("user przegrał")
                 flag=false
             }
             else if(arrayLosePointsId[i] == id && gameOrder == false){
-                console.log("user przegrał")
+                resultGame("user przegrał")
                 flag=false
             }
         }
@@ -180,6 +206,10 @@ $(function(){
     // Function for handling computer movement
 
     function cpuMove(){
+        if(arrayActualId[0] === undefined){
+            resultGame("Wygrałeś")
+            return
+        }
         setTimeout(function(){
             newCenterPointId = Number(arrayActualId[0]);
             makeMove("red");
@@ -231,6 +261,9 @@ $(function(){
                     activePoint.on('click', userMove)
                 }
             }
+            if($('.active').length === 0 && gameOrder === false){
+                resultGame("przejebałeś")
+            }
         }  
     }
 
@@ -238,7 +271,7 @@ $(function(){
 
     function actualActivePointsId(){
         arrayActualId=[];
-        let actualActivePoints=$('.active')
+        let actualActivePoints=$('.active');
         actualActivePoints.each(function(){
             arrayActualId.push($(this).attr('id'))
         })     
