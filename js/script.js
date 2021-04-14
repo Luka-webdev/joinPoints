@@ -19,6 +19,14 @@ $(function(){
     let flag = true;
     const message = $('.msg');
     const playAgain = $('.playAgain');
+    const showRules = $('.showRules');
+    
+    // function to close welcome screen 
+
+    showRules.on('click',function(){
+        $('.welcomeScreen').addClass('visibility');
+        $('.gameBoard').removeClass('visibility');
+    })
 
     // Identification of id numbers on the goal lines
 
@@ -174,7 +182,7 @@ $(function(){
 
     function resultGame(txt){
         message.removeClass('visibility');
-        $('.msg h1').text(txt);
+        $('.msg h2').text(txt);
         playAgain.on('click',generalReset);
     }
 

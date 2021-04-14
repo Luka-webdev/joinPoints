@@ -1,7 +1,30 @@
-.gameBoard {
+.welcomeScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+}
+.welcomeScreen .content {
+  margin: auto;
+}
+.welcomeScreen .content h1 {
+  font-family: "Bangers", cursive;
+  font-size: 200px;
+  margin: 0;
+  color: #009432;
+  letter-spacing: 10px;
+  text-shadow: 4px 4px 0px #eb2f06;
+}
+
+.gameBoard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 .gameBoard .board {
   margin: auto;
@@ -33,7 +56,15 @@
 body {
   padding: 0;
   margin: 0;
-  background-color: #006266;
+}
+
+.wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../pictures/footballs.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .center {
