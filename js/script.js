@@ -70,17 +70,17 @@ $(function(){
         goalArea(0,2*step)
         goalArea(boardWidth,boardWidth-2*step)
 
-        function goalLine(x0){
+        function goalLine(x0,color){
             ctx.beginPath();
             ctx.moveTo(x0,boardHeight/2);
             ctx.lineTo(x0,boardHeight/2-step);
             ctx.lineTo(x0,boardHeight/2+step);
-            ctx.strokeStyle = "black";
+            ctx.strokeStyle = color;
             ctx.stroke();
         }
 
-        goalLine(0);
-        goalLine(boardWidth);
+        goalLine(0,"green");
+        goalLine(boardWidth,"red");
 
         function corners(x0,y0,direction){
             ctx.beginPath();
@@ -174,7 +174,6 @@ $(function(){
         gameOrder = true;
         flag = true;
         createPitch();
-        creatPoints();
         setActivePoints(centerPointId);
     }
 
