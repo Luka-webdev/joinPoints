@@ -17,6 +17,7 @@ $(function(){
     let gameOrder = true;
     let newCenterPointId;
     let flag = true;
+    let stopGame = false;
     const message = $('.msg');
     const playAgain = $('.playAgain');
     const showRules = $('.showRules');
@@ -139,27 +140,25 @@ $(function(){
 
     function getCoordinate(newId){
 
-            centerX = parseInt(centerPoint.css('left'));
-            centerY = parseInt(centerPoint.css('top'));
+        centerX = parseInt(centerPoint.css('left'));
+        centerY = parseInt(centerPoint.css('top'));
 
-            moveX = parseInt($('#'+newId).css('left'));
-            moveY = parseInt($('#'+newId).css('top'));
+        moveX = parseInt($('#'+newId).css('left'));
+        moveY = parseInt($('#'+newId).css('top'));
 
-            previousConnectedId = centerPoint.attr('id');
-            newConnectedId = $('#'+newId).attr('id');
-            connections.push(previousConnectedId+"-"+newConnectedId);
+        previousConnectedId = centerPoint.attr('id');
+        newConnectedId = $('#'+newId).attr('id');
+        connections.push(previousConnectedId+"-"+newConnectedId);
     }
 
     // function to make move
 
-    function makeMove(color){
-        if(flag){
-            resetProperty();
-            getCoordinate(newCenterPointId)
-            drawMove(centerX,centerY,moveX,moveY,color);
-            setActivePoints(newCenterPointId);
-            actualActivePointsId();
-        }
+    function makeMove(color){    
+        resetProperty();
+        getCoordinate(newCenterPointId);
+        drawMove(centerX,centerY,moveX,moveY,color);
+        setActivePoints(newCenterPointId);
+        actualActivePointsId();    
     }
 
     // Function to start the game from the beginning
@@ -173,6 +172,7 @@ $(function(){
         connections.length = 0;
         gameOrder = true;
         flag = true;
+        stopGame = false;
         createPitch();
         setActivePoints(centerPointId);
     }
@@ -180,9 +180,11 @@ $(function(){
     // Function to display information about winning or losing game
 
     function resultGame(txt){
+        stopGame=true;
         message.removeClass('visibility');
         $('.msg h2').text(txt);
         playAgain.on('click',generalReset);
+        
     }
 
     // Function for determining conditions for winning and losing the game
@@ -190,22 +192,18 @@ $(function(){
     function checkConditions(id){
         for(let i=0;i<arrayWinPointsId.length;i++){
             if(arrayWinPointsId[i] == id && gameOrder == false){
-                resultGame("user wygrał")
-                flag=false   
+                resultGame("Wygrałeś");             
             }
             else if(arrayWinPointsId[i] == id && gameOrder == true){
-                resultGame("user wygrał")
-                flag=false
+                resultGame("Wygrałeś");
             }
         }
         for(let i=0;i<arrayLosePointsId.length;i++){
             if(arrayLosePointsId[i] == id && gameOrder == true){
-                resultGame("user przegrał")
-                flag=false
+                resultGame("Przegrałeś"); 
             }
             else if(arrayLosePointsId[i] == id && gameOrder == false){
-                resultGame("user przegrał")
-                flag=false
+                resultGame("Przegrałeś");
             }
         }
     }
@@ -213,7 +211,7 @@ $(function(){
     // Function for handling computer movement
 
     function cpuMove(){
-        if(arrayActualId[0] === undefined){
+        if(arrayActualId[0] === undefined && stopGame === false){
             resultGame("Wygrałeś")
             return
         }
@@ -253,12 +251,12 @@ $(function(){
     // Function to determination active points for user motion
 
     function setActivePoints(id) {
-
+        
         checkConditions(id);
-        if(flag){
-            if(id === Math.floor(numberPoints/2)){
-                $('#'+id).attr('clicked',true);
-            }
+        if(id === Math.floor(numberPoints/2)){
+            $('#'+id).attr('clicked',true);
+        }
+        if(!stopGame){
             centerPoint = $('#'+id);
             centerPoint.addClass('center');
             for(let i=0;i<activePointsId.length;i++){
@@ -269,9 +267,9 @@ $(function(){
                 }
             }
             if($('.active').length === 0 && gameOrder === false){
-                resultGame("przejebałeś")
-            }
-        }  
+                resultGame("Przegrałeś")
+            } 
+        }   
     }
 
     // Function to determination of active points for computer motion

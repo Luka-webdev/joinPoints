@@ -62,11 +62,30 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 50%;
+  width: auto;
   height: 50%;
-  border: 2px solid black;
-  background-color: olivedrab;
+  background-color: transparent;
+  text-align: center;
+  font-size: 80px;
   z-index: 2;
+}
+.gameBoard .board .msg h2 {
+  margin: 0;
+  font-family: "Bangers", cursive;
+  letter-spacing: 5px;
+}
+.gameBoard .board .msg .playAgain {
+  font-family: "Zen Dots", cursive;
+  font-size: 25px;
+  outline: none;
+  border: 4px solid black;
+  color: #1e272e;
+  background-color: #d2dae2;
+}
+.gameBoard .board .msg .playAgain:hover {
+  cursor: pointer;
+  background-color: #1e272e;
+  color: #d2dae2;
 }
 
 body {
