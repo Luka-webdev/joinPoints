@@ -6,17 +6,128 @@
     width:90%;
     height:90%;
     border:2px solid black;
-    background-color: orange;
+    background-color: #ffb142;
 
     .rules {
-        display:flex;
-        flex-wrap: wrap;
+        width:100%;
+        height:100%;
+        display:grid;
+        grid-template-columns: repeat(4,1fr);
+        grid-template-rows: repeat(3,1fr);
+        grid-template-areas:
+        "description rule1 rule1 rule2"
+        "rule3 rule3 rule4 rule4"
+        "rule5 rule6 rule7 rule8";
 
-        .descriptionGame,
-        div[class*='rule'] {
-            width:30%;
-            height:auto;
-            border:2px solid black;
+        .descriptionGame {
+            grid-area: description;
+            padding:20px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px; 
+            background-color:#227093;
+            border-radius: 20px;
+            
+        }
+        .rule1 {
+            grid-area: rule1;
+            padding:20px;
+
+            p {
+                width:50%;
+                height:100%;
+                margin:0;
+                padding-top:20px;
+                text-align: right;
+                float:left;
+            }
+            img {
+                display: block;
+                float:left;
+            }
+        }
+        .rule2 {
+            grid-area: rule2;
+            padding:20px;
+        }
+        .rule3 {
+            grid-area: rule3;
+            padding:20px;
+
+            p {
+                width:50%;
+                height:100%;
+                margin:0;
+                padding-top:20px;
+                text-align: right;
+                float:left;
+            }
+            img {
+                display: block;
+                float:left;
+            }
+        }
+        .rule4 {
+            grid-area: rule4;
+            padding:20px;
+            p {
+                width:50%;
+                height:100%;
+                margin:0;
+                padding-top:20px;
+                text-align: right;
+                float:left;
+            }
+            img {
+                display: block;
+                float:left;
+            }
+        }
+        .rule5 {
+            grid-area: rule5;
+            padding:20px;
+        }
+        .rule6 {
+            grid-area: rule6;
+            padding:20px;
+        }
+        .rule7 {
+            grid-area: rule7;
+            padding:20px;
+        }
+        .rule8 {
+            grid-area: rule8;
+            display:flex;
+
+            .play {
+                margin:auto;
+                font-family: 'Zen Dots', cursive;
+                font-size: 30px;
+                padding:5px 10px;
+                outline: none;
+                border:4px solid black;
+                color:#273c75;
+                background-color: #d2dae2;
+
+                &:hover {
+                    cursor:pointer;
+                    background-color: #273c75;
+                    color:#d2dae2;
+                }
+            }
+        }
+
+        div[class*='rule'] span {
+            font-family: 'Bangers', cursive;
+            font-size: 26px;
+        }
+        div[class*='rule'] img {
+            border:3px solid black;
+            border-radius: 10px;
+        }
+        div[class*='rule'] p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px; 
+            margin:0 10px;
         }
     }
 
