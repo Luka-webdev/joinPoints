@@ -1,0 +1,23 @@
+.gameRules {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    width:90%;
+    height:90%;
+    border:2px solid black;
+    background-color: orange;
+
+    .rules {
+        display:flex;
+        flex-wrap: wrap;
+
+        .descriptionGame,
+        div[class*='rule'] {
+            width:30%;
+            height:auto;
+            border:2px solid black;
+        }
+    }
+
+}

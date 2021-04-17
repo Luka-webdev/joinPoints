@@ -21,11 +21,20 @@ $(function(){
     const message = $('.msg');
     const playAgain = $('.playAgain');
     const showRules = $('.showRules');
+    const gameRules = $('.gameRules');
+    const play = $('.play');
     
     // function to close welcome screen 
 
     showRules.on('click',function(){
         $('.welcomeScreen').addClass('visibility');
+        $('.gameRules').removeClass('visibility');
+    })
+
+    // function to start game 
+
+   play.on('click',function(){
+        gameRules.addClass('visibility');
         $('.gameBoard').removeClass('visibility');
     })
 
