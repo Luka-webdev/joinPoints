@@ -1,10 +1,19 @@
+%paragraphs {
+    width:50%;
+    height:100%;
+    margin:0;
+    padding-top:20px;
+    text-align: right;
+    float:left;
+}
+
 .gameRules {
     position:absolute;
     top:50%;
     left:50%;
     transform: translate(-50%,-50%);
-    width:90%;
-    height:90%;
+    width:80%;
+    height:80%;
     border:2px solid black;
     background-color: #ffb142;
 
@@ -18,81 +27,54 @@
         "description rule1 rule1 rule2"
         "rule3 rule3 rule4 rule4"
         "rule5 rule6 rule7 rule8";
-
+     
         .descriptionGame {
             grid-area: description;
-            padding:20px;
+            padding:10px;
             font-family: 'Roboto', sans-serif;
-            font-size: 20px; 
+            font-size: 18px; 
             background-color:#227093;
-            border-radius: 20px;
+            border-radius: 0px 10px 20px 10px;
             
         }
         .rule1 {
             grid-area: rule1;
-            padding:20px;
+            padding:10px;
 
             p {
-                width:50%;
-                height:100%;
-                margin:0;
-                padding-top:20px;
-                text-align: right;
-                float:left;
-            }
-            img {
-                display: block;
-                float:left;
+                @extend %paragraphs;
             }
         }
         .rule2 {
             grid-area: rule2;
-            padding:20px;
+            padding:30px 0 0 0;
         }
         .rule3 {
             grid-area: rule3;
-            padding:20px;
+            padding:10px;
 
             p {
-                width:50%;
-                height:100%;
-                margin:0;
-                padding-top:20px;
-                text-align: right;
-                float:left;
-            }
-            img {
-                display: block;
-                float:left;
+                @extend %paragraphs;
             }
         }
         .rule4 {
             grid-area: rule4;
-            padding:20px;
+            padding:10px;
             p {
-                width:50%;
-                height:100%;
-                margin:0;
-                padding-top:20px;
-                text-align: right;
-                float:left;
-            }
-            img {
-                display: block;
-                float:left;
+                @extend %paragraphs;
             }
         }
         .rule5 {
             grid-area: rule5;
-            padding:20px;
+            padding:10px;
         }
         .rule6 {
             grid-area: rule6;
-            padding:20px;
+            padding:10px;
         }
         .rule7 {
             grid-area: rule7;
-            padding:20px;
+            padding:10px;
         }
         .rule8 {
             grid-area: rule8;
@@ -121,14 +103,16 @@
             font-size: 26px;
         }
         div[class*='rule'] img {
+            display: block;
+            float:left;
             border:3px solid black;
             border-radius: 10px;
         }
         div[class*='rule'] p {
             font-family: 'Roboto', sans-serif;
-            font-size: 20px; 
+            font-size: 18px; 
             margin:0 10px;
+            text-align: center;     
         }
     }
-
 }
